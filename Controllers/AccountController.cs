@@ -1,12 +1,14 @@
 ﻿using BankApi.Data.DTOs;
 using BankApi.Models;
 using BankApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankApi.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -22,7 +24,7 @@ namespace BankApi.Controllers
         }
 
 
-
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<IEnumerable<AccountDTOout>> GetAccounts()
         {
@@ -80,7 +82,7 @@ namespace BankApi.Controllers
 
         }
 
-
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
