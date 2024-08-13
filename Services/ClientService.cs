@@ -1,6 +1,8 @@
 ﻿using BankApi.Data;
 using BankApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace BankApi.Services
 {
@@ -13,66 +15,59 @@ namespace BankApi.Services
         public ClientService(BankContext context)
         {
             _context = context;
-
         }
 
 
-        public IEnumerable<Client> GetClients()
+        public async Task<IEnumerable<Client>> GetClients()
         {
-            return _context.Clients.ToList();
-
-        }
-
-      
-        public Client? GetById(int id)
-        {
-            return _context.Clients.Find(id);
-
-           
+            return await _context.Clients.ToListAsync();
         }
 
       
-        public Client Create(Client client)
+        public async Task <Client?> GetById(int id)
         {
+            return await _context.Clients.FindAsync(id);
+        }
 
+      
+        public async Task<Client> Create(Client client)
+        {
             _context.Clients.Add(client);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return client;
         }
 
 
        
-        public void Update( Client client)
+        public async Task  Update( Client client)
         {
            
 
-            var existingClient = GetById(client.Id);
-
+            var existingClient = await GetById(client.Id);
+            
             if (existingClient is not null)
             {
                 existingClient.Name = client.Name;
                 existingClient.PhoneNumber = client.PhoneNumber;
                 existingClient.Email = client.Email;
 
-                _context.SaveChanges();
+                await   _context.SaveChangesAsync();
             }
              
         }
 
 
        
-        public void  Delete(int id)
+        public async Task  Delete(int id)
         {
-            var existingClient = GetById(id);
+            var existingClient = await GetById(id);
+
             if (existingClient is not null)
             {
-
                 _context.Clients.Remove(existingClient);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
             }
-
+            
         }
     }
 }

@@ -20,16 +20,16 @@ namespace BankApi.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Client> GetClients()
+        public async Task<IEnumerable<Client>> GetClients()
         {
-            return _service.GetClients(); 
+            return await  _service.GetClients(); 
         }
 
 
         [HttpGet ("{id}")]
-        public ActionResult<Client> GetById(int id)
+        public async Task< ActionResult<Client>> GetById(int id)
         {
-            var client = _service.GetById(id);
+            var client = await _service.GetById(id);
 
             if(client is null) return NotFound(new { Mensaje = $"Cliente con ID {id} no encontrado" });
 
@@ -39,9 +39,9 @@ namespace BankApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Client client) {
+        public async Task< IActionResult> Create(Client client) {
         
-              var newClient= _service.Create(client);
+              var newClient= await _service.Create(client);
         
             return CreatedAtAction(nameof(GetById), new {id = newClient.Id}, newClient);  
             
@@ -49,13 +49,13 @@ namespace BankApi.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id)
+        public async Task <IActionResult> Update(int id)
         {
             
-            var existingClient = _service.GetById(id);
+            var existingClient = await _service.GetById(id);
             if (existingClient is not null)
             {
-                _service.Update(existingClient);
+                await   _service.Update(existingClient);
                 return Ok("Cliente actualizado correctamente.");
 
             }
@@ -68,13 +68,14 @@ namespace BankApi.Controllers
 
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var ClientToDelete =_service.GetById(id);   
+            var ClientToDelete =await _service.GetById(id);   
             if (ClientToDelete is not  null)
             {
-                _service.Delete(id);
-                return Ok("Usuario eliminado correctamnte");
+                var clientName = ClientToDelete.Name;
+                await   _service.Delete(id);
+                return Ok($"El usuario '{clientName}' ha sido eliminado correctamnte");
             }
             else
             {
