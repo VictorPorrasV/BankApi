@@ -13,9 +13,9 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string Pwd { get; set; } = null!;
+    public string? Pwd { get; set; }
 
-    public string AdminType { get; set; } = null!;
+    public string? AdminType { get; set; }
 
     public DateTime RegDate { get; set; }
 }

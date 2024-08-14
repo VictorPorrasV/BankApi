@@ -28,7 +28,8 @@ public partial class BankContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-   
+    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -137,8 +138,8 @@ public partial class BankContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AdminType)
-                .HasMaxLength(30)
-                .IsUnicode(false);
+                .HasMaxLength(50)
+                .HasDefaultValue("customer");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -148,9 +149,7 @@ public partial class BankContext : DbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(40)
                 .IsUnicode(false);
-            entity.Property(e => e.Pwd)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Pwd).HasMaxLength(64);
             entity.Property(e => e.RegDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
